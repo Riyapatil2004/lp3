@@ -1,0 +1,53 @@
+// 3 student
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;  // Specifies the Solidity version required for this contract, version 0.8.0 or higher.
+
+contract StudentRegistry {  // Defines the contract named 'StudentRegistry'.
+    
+    // Define a struct to represent a Student with two properties: name and age.
+    struct Student {
+        string name;  // Name of the student.
+        uint256 age;  // Age of the student.
+    }
+
+    // Declare a public array of Student structures to store all students.
+    Student[] public students;
+
+    // Define an event to log the received Ether value when the contract receives Ether.
+    event ReceivedEther(address indexed sender, uint256 value);
+
+    // Receive function is triggered when the contract receives Ether directly.
+    // It is a special function with no function name, only to accept Ether.
+    receive() external payable {
+        // Log the Ether received, and the address that sent it.
+        emit ReceivedEther(msg.sender, msg.value);
+    }
+
+    // Fallback function is triggered when the contract receives Ether, but the call data does not match any existing function.
+    // This is used as a catch-all for unmatched function calls.
+    fallback() external payable {
+        // Log the Ether received, and the address that sent it.
+        emit ReceivedEther(msg.sender, msg.value);
+    }
+
+    // Function to add a new student by specifying their name and age.
+    function addStudent(string memory name, uint256 age) public {
+        // Create a new Student struct and add it to the 'students' array.
+        students.push(Student(name, age));
+    }
+
+    // Function to retrieve the details (name and age) of a student by their index.
+    function getStudent(uint256 index) public view returns (string memory, uint256) {
+        // Ensure the provided index is valid (i.e., less than the length of the students array).
+        require(index < students.length, "Student not found");
+        // Return the name and age of the student at the given index.
+        return (students[index].name, students[index].age);
+    }
+
+    // Function to get the total number of students stored in the contract.
+    function getStudentCount() public view returns (uint256) {
+        // Return the length of the students array (total count of students).
+        return students.length;
+    }
+}

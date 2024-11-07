@@ -1,0 +1,43 @@
+// 2 bank
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;  // Specifies the Solidity version required for this contract, version 0.8.0 or higher.
+
+contract Bank {  // Defines the contract named 'Bank'.
+    // Mapping that associates an address with a uint256 balance.
+    mapping(address => uint256) private balances;
+
+    // Function to create an account by setting an initial balance of zero for the caller.
+    function createAccount() public {
+        balances[msg.sender] = 0;
+    }
+
+    // Deposit function that allows the caller to add funds to their balance.
+    // `payable` modifier allows the function to receive Ether from external sources.
+    function deposit(uint256 amount) public payable {
+        balances[msg.sender] += amount;  // Adds the deposit amount to the caller's balance.
+    }
+
+    // Withdraw function that allows the caller to withdraw funds from their account.
+    function withdraw(uint256 amount) public {
+        // Ensures the caller has enough balance to withdraw the specified amount.
+        require(balances[msg.sender] >= amount, "Insufficient balance");
+        balances[msg.sender] -= amount;  // Subtracts the amount from the caller's balance.
+    }
+
+    /*
+    // Transfer function to send funds from the caller's account to another account.
+    // It requires sufficient balance in the caller's account.
+    function transfer(address recipient, uint256 amount) public {
+        require(balances[msg.sender] >= amount, "Insufficient balance");
+        balances[msg.sender] -= amount;  // Deducts the amount from sender's balance.
+        balances[recipient] += amount;   // Adds the amount to the recipient's balance.
+    }
+    */
+
+    // getBalance function returns the caller's balance without modifying the contract's state.
+    // The `view` modifier indicates that this function only reads data and doesn't alter the contract.
+    function getBalance() public view returns (uint256) {
+        return balances[msg.sender];  // Returns the caller's current balance.
+    }
+}

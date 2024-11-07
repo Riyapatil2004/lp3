@@ -1,0 +1,34 @@
+// 4 employee
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;  // Specifies that the contract uses Solidity version 0.8.0 or higher.
+
+contract EmployeeDetails {  // Defines the contract named 'EmployeeDetails'.
+    
+    // Define a struct called 'Employee' to store the details of an employee.
+    struct Employee {
+        uint id;            // Employee ID.
+        string name;        // Employee name.
+        uint salary;        // Employee salary.
+        string joiningDate; // Employee's joining date.
+    }
+
+    // Declare a public dynamic array of Employee structs to store the employee records.
+    Employee[] public employee;
+
+    // Function to create or update an employee's details.
+    // This function allows adding a new employee by providing their ID, name, salary, and joining date.
+    function createEmployee(uint _id, string memory _name, uint _salary, string memory _joiningDate) public {
+        // Add a new Employee struct with the provided details to the employee array.
+        employee.push(Employee(_id, _name, _salary, _joiningDate));
+    }
+
+    // Function to retrieve the details of an employee at a given index in the array.
+    function getEmployeeDetails(uint256 index) public view returns (uint, string memory, uint, string memory) {
+        // Check that the index is valid (i.e., the index is within the range of the employee array).
+        require(index < employee.length, "Employee not found");
+        
+        // Return the details (ID, name, salary, and joining date) of the employee at the specified index.
+        return (employee[index].id, employee[index].name, employee[index].salary, employee[index].joiningDate);
+    }
+}
