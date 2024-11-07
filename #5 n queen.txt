@@ -1,0 +1,96 @@
+#5 n queen
+
+from typing import List  # Import List for type hinting
+
+# Global variable to keep track of the number of solutions
+boardcount = 0
+
+# Function to check if placing a queen at chessboard[row][col] is safe
+def isboardok(chessboard: List, row: int, col: int):
+    # Check if any queen is already placed in the same row to the left
+    for c in range(col):
+        if chessboard[row][c] == 'Q':
+            return False
+
+    # Check the upper diagonal on the left side
+    for r, c in zip(range(row - 1, -1, -1), range(col - 1, -1, -1)):
+        if chessboard[r][c] == 'Q':
+            return False
+
+    # Check the lower diagonal on the left side
+    for r, c in zip(range(row + 1, len(chessboard), 1), range(col - 1, -1, -1)):
+        if chessboard[r][c] == 'Q':
+            return False
+
+    # Return True if the position is safe
+    return True
+
+# Function to print the chessboard
+def displayboard(chessboard: List):
+    # Print each row of the chessboard
+    for row in chessboard:
+        print(row)
+    print()  # Add a blank line after each board display
+
+# Recursive function to try placing queens in all columns one by one
+def placenqueens(chessboard: List, col: int):
+    global boardcount  # Use the global variable to track solution count
+
+    # Base case: If all columns are filled, a solution is found
+    if col >= len(chessboard):
+        boardcount += 1  # Increment solution count
+        print("Board " + str(boardcount))  # Print solution number
+        print("======================")  # Separator line
+        displayboard(chessboard)  # Display the current solution board
+        print("======================\n\n")  # More separators for clarity
+    else:
+        # Try placing a queen in each row of the current column
+        for row in range(len(chessboard)):
+            chessboard[row][col] = 'Q'  # Place a queen at chessboard[row][col]
+            # Check if placing the queen here is safe
+            if isboardok(chessboard, row, col) == True:
+                # If safe, move to the next column
+                placenqueens(chessboard, col + 1)
+            # Backtrack: Remove the queen and try next row
+            chessboard[row][col] = '.'
+
+# Initialize the chessboard as an empty N x N board
+chessboard = []
+N = int(input("Enter chessboard size: "))  # Get size of the board from user
+
+# Create an N x N chessboard filled with dots ('.') to indicate empty spaces
+for i in range(N):
+    row = ["."] * N  # Initialize each row with '.'
+    chessboard.append(row)  # Add the row to the chessboard
+
+# Start the recursive function to place queens from the first column
+placenqueens(chessboard, 0)
+
+
+
+
+output:
+
+Enter chessboard size: 4
+Board1
+======================
+['.', '.', 'Q', '.']
+['Q', '.', '.', '.']
+['.', '.', '.', 'Q']
+['.', 'Q', '.', '.']
+
+======================
+
+
+Board2
+======================
+['.', 'Q', '.', '.']
+['.', '.', '.', 'Q']
+['Q', '.', '.', '.']
+['.', '.', 'Q', '.']
+
+======================
+
+
+
+=== Code Execution Successful ===

@@ -1,0 +1,109 @@
+#2. Huffman
+
+import heapq  # Importing the heapq module to use a min-heap data structure for managing nodes based on frequency.
+
+# Define the Node class to represent each character (or group of characters) in the Huffman Tree.
+class Node:
+    def __init__(self, freq, symbol, left=None, right=None):
+        self.freq = freq  # Frequency of the character(s)
+        self.symbol = symbol  # The character(s) themselves
+        self.left = left  # Left child of the node
+        self.right = right  # Right child of the node
+        self.huff = ""  # This will store "0" or "1" to help build the Huffman code during tree construction
+    
+    # Define the less-than operator (<) to compare nodes based on frequency
+    # This is needed for the min-heap to organize nodes by frequency.
+    def __lt__(self, other):
+        return self.freq < other.freq  
+
+# Define a function to print the Huffman codes for each character.
+# This function recursively traverses the Huffman Tree and prints the code for each character.
+def print_huffman_codes(node, val=""):
+    # Update val with the current node's Huffman code, which is either "0" or "1"
+    newval = val + node.huff
+    
+    # If there's a left child, recursively call print_huffman_codes on the left child.
+    if node.left:
+        print_huffman_codes(node.left, newval)
+    
+    # If there's a right child, recursively call print_huffman_codes on the right child.
+    if node.right:
+        print_huffman_codes(node.right, newval)
+    
+    # If the node has no children (i.e., it's a leaf node), print the character and its Huffman code.
+    else:
+        print(f"{node.symbol} -> {newval}")
+
+# Main function to handle user input, construct the Huffman Tree, and print the codes.
+def main():
+    # Ask the user to enter the number of characters they want to encode.
+    num_chars = int(input("Enter the number of characters: "))
+    
+    # Initialize empty lists to store characters and their frequencies.
+    chars = []
+    freqs = []
+    
+    # Loop to collect each character and its frequency from the user.
+    for i in range(num_chars):
+        char = input(f"Enter character {i + 1}: ")
+        freq = int(input(f"Enter frequency of character '{char}': "))
+        chars.append(char)
+        freqs.append(freq)
+    
+    # Initialize an empty list that will hold the nodes of the Huffman Tree.
+    nodes = []
+    # Create a Node object for each character and its frequency, and add it to the nodes heap.
+    for i in range(len(chars)):
+        heapq.heappush(nodes, Node(freqs[i], chars[i]))
+
+    # Build the Huffman Tree by combining nodes until only one node remains in the heap.
+    while len(nodes) > 1:
+        # Remove the two nodes with the lowest frequency from the heap.
+        left = heapq.heappop(nodes)
+        right = heapq.heappop(nodes)
+        
+        # Assign "0" to the left node and "1" to the right node for Huffman encoding.
+        left.huff = "0"
+        right.huff = "1"
+        
+        # Create a new node by combining the two nodes.
+        # The frequency of the new node is the sum of the two child nodes' frequencies.
+        # The symbol is a concatenation of the left and right symbols (used only for internal identification).
+        newnode = Node(left.freq + right.freq, left.symbol + right.symbol, left, right)
+        
+        # Add the new node back into the heap.
+        heapq.heappush(nodes, newnode)
+
+    # Start the recursive function to print Huffman codes from the root node (nodes[0]).
+    print_huffman_codes(nodes[0])
+
+# Run the main function if this file is executed directly.
+if __name__ == '__main__':
+    main()
+
+
+
+output:
+
+output:
+Enter the number of characters: 6
+Enter character 1: a
+Enter frequency of character 'a': 5
+Enter character 2: b
+Enter frequency of character 'b': 9
+Enter character 3: c
+Enter frequency of character 'c': 12
+Enter character 4: d
+Enter frequency of character 'd': 13
+Enter character 5: e
+Enter frequency of character 'e': 16
+Enter character 6: f
+Enter frequency of character 'f': 45
+f -> 0
+c -> 100
+d -> 101
+a -> 1100
+b -> 1101
+e -> 111
+
+=== Code Execution Successful ===

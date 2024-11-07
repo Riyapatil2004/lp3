@@ -1,0 +1,89 @@
+#1 Fibonaci
+
+
+import heapq
+
+# Non-Recursive Fibonacci Function
+def fibonacci_non_recursive(n):
+    # Handle base cases
+    if n <= 0:
+        return 0  # If n is 0, the Fibonacci series is [0]
+    elif n == 1:
+        return 1  # If n is 1, the Fibonacci series is [0, 1]
+    
+    # Initialize first two numbers in the Fibonacci sequence
+    a, b = 0, 1
+    fib_series = [a, b]  # Start the series with 0 and 1
+    
+    # Loop from the third term up to the nth term
+    for _ in range(2, n + 1):
+        a, b = b, a + b  # Update a and b to the next numbers in the series
+        fib_series.append(b)  # Append the next Fibonacci number to the series
+    
+    return fib_series  # Return the entire Fibonacci series up to the nth term
+
+# Recursive Fibonacci Function
+def fibonacci_recursive(n, fib_series=None):
+    # Initialize the Fibonacci series with the first two numbers if not provided
+    if fib_series is None:
+        fib_series = [0, 1]
+    
+    # Handle base cases
+    if n <= 0:
+        return [0]  # If n is 0, the Fibonacci series is [0]
+    elif n == 1:
+        return fib_series  # If n is 1, the series is [0, 1]
+    
+    # Calculate the next Fibonacci number and add it to the series
+    fib_series.append(fib_series[-1] + fib_series[-2])
+    
+    # Recursive call to continue generating the series up to the nth term
+    return fibonacci_recursive(n - 1, fib_series)
+
+# Time and Space Complexity Analysis
+def analyze_complexity():
+    # Print time and space complexity for the non-recursive approach
+    print("\nNon-Recursive Fibonacci:")
+    print("Time Complexity: O(n)")  # Linear time complexity as each term is computed once
+    print("Space Complexity: O(n)")  # Space for storing the series up to nth term
+
+    # Print time and space complexity for the recursive approach
+    print("\nRecursive Fibonacci:")
+    print("Time Complexity: O(2^n)")  # Exponential time due to repeated calculations
+    print("Space Complexity: O(n)")  # Stack space grows linearly with recursion depth
+
+# Example Usage
+n = int(input('Enter a number: '))
+
+# Generate and display the Fibonacci series using the non-recursive function
+non_recursive_series = fibonacci_non_recursive(n)
+print(f"Non-Recursive Fibonacci Series of {n}: {non_recursive_series}")
+print(f"Non-Recursive Fibonacci of {n} is: {non_recursive_series[-1]}")
+
+# Generate and display the Fibonacci series using the recursive function
+recursive_series = fibonacci_recursive(n)
+print(f"Recursive Fibonacci Series of {n}: {recursive_series}")
+print(f"Recursive Fibonacci of {n} is: {recursive_series[-1]}")
+
+# Display time and space complexity analysis
+analyze_complexity()
+
+
+output:
+
+Output:
+Enter a number: 10
+Non-Recursive Fibonacci Series of 10: [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55]
+Non-Recursive Fibonacci of 10 is: 55
+Recursive Fibonacci Series of 10: [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55]
+Recursive Fibonacci of 10 is: 55
+
+Non-Recursive Fibonacci:
+Time Complexity: O(n)
+Space Complexity: O(n)
+
+Recursive Fibonacci:
+Time Complexity: O(2^n)
+Space Complexity: O(n)
+
+=== Code Execution Successful ===

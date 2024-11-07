@@ -1,0 +1,94 @@
+#3 fractional knapsack
+
+# Define the fractional knapsack function
+def fractional_knapsack(capacity, profits, weights):
+    n = len(profits)  # Number of items
+    items = []  # List to store items with profit, weight, and profit/weight ratio
+    
+    # Loop to create a list of items with profit, weight, and their profit/weight ratio
+    for i in range(n):
+        # Calculate profit/weight ratio for each item
+        ratio = profits[i] / weights[i] if weights[i] != 0 else 0
+        # Append each item as a tuple (profit, weight, ratio, index) to track the original index
+        items.append((profits[i], weights[i], ratio, i))
+    
+    # Sort items by their profit/weight ratio in descending order for maximum profit first
+    items.sort(key=lambda x: x[2], reverse=True)
+    
+    total_value = 0.0  # Initialize the total value in the knapsack
+    fractions = [0] * n  # Initialize fractions array to keep track of fraction of each item taken
+    
+    # Loop over the sorted items to determine how much of each to take
+    for profit, weight, _, index in items:
+        # If the item can be fully taken (i.e., it fits in the remaining capacity)
+        if capacity >= weight:
+            total_value += profit  # Add entire profit of the item to total value
+            capacity -= weight  # Reduce capacity by the item's weight
+            fractions[index] = 1.0  # Mark that the whole item was taken
+        else:
+            # If the item cannot be fully taken, take as much as possible
+            total_value += profit * (capacity / weight)  # Add fraction of profit
+            fractions[index] = capacity / weight  # Record fraction of the item taken
+            break  # Knapsack is full, so break out of the loop
+
+    return total_value, fractions  # Return total value and fractions of each item taken
+
+# Main function to get user input and display results
+def main():
+    # Get the number of items from the user
+    n = int(input("Enter the number of items: "))
+    
+    profits = []  # List to store profits of items
+    weights = []  # List to store weights of items
+
+    # Loop to get profit and weight for each item from the user
+    for i in range(n):
+        profit = int(input(f"Enter profit of item {i + 1}: "))  # Input profit of the item
+        weight = int(input(f"Enter weight of item {i + 1}: "))  # Input weight of the item
+        profits.append(profit)  # Add profit to profits list
+        weights.append(weight)  # Add weight to weights list
+    
+    # Get knapsack capacity from the user
+    capacity = int(input("Enter the capacity of the knapsack: "))
+    # Calculate maximum possible value and fractions of items to take
+    max_value, fractions = fractional_knapsack(capacity, profits, weights)
+    
+    # Display each item's weight, profit, and profit/weight ratio
+    for i in range(n):
+        # Calculate and display the profit/weight ratio for each item
+        ratio = profits[i] / weights[i] if weights[i] != 0 else 0
+        print(f"Item {i + 1}: Weight = {weights[i]}, Profit = {profits[i]}, Profit/Weight Ratio = {ratio:.2f}")
+    
+    # Display the maximum value achieved in the knapsack
+    print(f"\nMaximum value in knapsack: {max_value}")
+
+# Execute the main function if this script is run directly
+if __name__ == "__main__":
+    main()
+
+
+output:
+
+output:
+
+Enter the number of items: 5
+Enter profit of item 1: 30
+Enter weight of item 1: 5
+Enter profit of item 2: 40
+Enter weight of item 2: 10
+Enter profit of item 3: 45
+Enter weight of item 3: 15
+Enter profit of item 4: 77
+Enter weight of item 4: 22
+Enter profit of item 5: 90
+Enter weight of item 5: 25
+Enter the capacity of the knapsack: 60
+Item 1: Weight = 5, Profit = 30, Profit/Weight Ratio = 6.00
+Item 2: Weight = 10, Profit = 40, Profit/Weight Ratio = 4.00
+Item 3: Weight = 15, Profit = 45, Profit/Weight Ratio = 3.00
+Item 4: Weight = 22, Profit = 77, Profit/Weight Ratio = 3.50
+Item 5: Weight = 25, Profit = 90, Profit/Weight Ratio = 3.60
+
+Maximum value in knapsack: 230.0
+
+=== Code Execution Successful ==
